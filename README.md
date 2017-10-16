@@ -8,7 +8,8 @@ You need Leaflet >= 1.0.0 and include `dist/L.HeatMap.min.js`
 ```js
 // map is your map instance
 var options = {
-    opacity: 0.5
+    opacity: 0.5,
+    useCanvas: false
 };
 var heatMap = L.heatMap('heatmap/tiles/{z}/{x}/{y}.png', options).addTo(map);
 ```
@@ -17,13 +18,13 @@ var heatMap = L.heatMap('heatmap/tiles/{z}/{x}/{y}.png', options).addTo(map);
 There are a few options that you can use
 
 * **options.colors** - *Array* Colors map (from 0 to 255), default is rainbow.
-* **options.altitudes** - *Array* Colors range, default is [0, 255]
+* **options.filters** - *Array* Colors range for filter, default is [0, 255] (no filter)
 * **options.opacity** - *Number* Opacity of heatmap, default is 1.
 * **options.useCanvas** - *Boolean* Use canvas instead of img, default is true.
 
 ## API
 * setColors(colors)
-* setAltitudes(altitudes)
+* setFilters(range)
 * setOpacity(opacity)
 * useCanvas(useOrNot)
 

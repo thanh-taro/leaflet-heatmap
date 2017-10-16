@@ -1,7 +1,7 @@
 L.HeatMap = L.TileLayer.extend({
     options: {
         useCanvas: true,
-        altitudes: [ 0, 255 ],
+        filters: [ 0, 255 ],
         opacity: 1,
         colors: [ {
             r: 0,
@@ -1035,20 +1035,20 @@ L.HeatMap = L.TileLayer.extend({
         if (options.colors) {
             this._colors = options.colors;
         }
-        if (options.altitudes) {
-            this._altitudes = options.altitudes;
+        if (options.filters) {
+            this._filters = options.filters;
         }
         if (options.useCanvas) {
             this._useCanvas = true;
         }
         this.on("tileload", this._onLoadCallback, this);
     },
-    setAltitudes: function(altitudes) {
-        this._altitudes = altitudes;
+    setFilters: function(filters) {
+        this._filters = filters;
         var tiles = this._tiles;
         var data = this._data;
         var colors = this._colors;
-        var altitudes = this._altitudes;
+        var filters = this._filters;
         var useCanvas = this._useCanvas;
         var tile, element, width, height, originData;
         for (id in tiles) {
@@ -1064,7 +1064,7 @@ L.HeatMap = L.TileLayer.extend({
             width = parseInt(element.getAttribute("data-height-map-width"));
             height = parseInt(element.getAttribute("data-height-map-height"));
             if (useCanvas) {
-                var canvasDOM = this._reScaleData(originData, width, height, colors, altitudes);
+                var canvasDOM = this._reScaleData(originData, width, height, colors, filters);
                 var context = canvasDOM.getContext("2d");
                 var imageData = context.getImageData(0, 0, width, height);
                 var elementContext = element.getContext("2d");
@@ -1072,7 +1072,7 @@ L.HeatMap = L.TileLayer.extend({
                 elementImageData.data.set(imageData.data);
                 elementContext.putImageData(elementImageData, 0, 0);
             } else {
-                element.src = this._reScaleData(originData, width, height, colors, altitudes).toDataURL();
+                element.src = this._reScaleData(originData, width, height, colors, filters).toDataURL();
             }
         }
     },
@@ -1088,14 +1088,14 @@ L.HeatMap = L.TileLayer.extend({
         var tile = e.tile;
         var coords = e.coords;
         var colors = this._colors;
-        var altitudes = this._altitudes;
+        var filters = this._filters;
         var data = this._data = this._data || {};
         var id = this._tileCoordsToKey(coords);
         var useCanvas = this._useCanvas;
         if (tile.getAttribute("data-height-map-scaled")) {
             return;
         }
-        this._scaleTile(tile, colors, altitudes, function(target, canvasDOM, originData, width, height) {
+        this._scaleTile(tile, colors, filters, function(target, canvasDOM, originData, width, height) {
             var src = target.src;
             if (useCanvas) {
                 canvasDOM.className = target.className;
@@ -1114,24 +1114,24 @@ L.HeatMap = L.TileLayer.extend({
             data[id] = originData;
         }.bind(this));
     },
-    _scale: function(data, width, height, colors, altitudes) {
-        var range = altitudes[1] - altitudes[0];
+    _scale: function(data, width, height, colors, filters) {
+        var range = filters[1] - filters[0];
         for (var i = 0, n = width * height * 4, d = data, color; i < n; i += 4) {
             if (d[i + 3] === 0) {
                 continue;
             }
-            if (d[i] < altitudes[0] || d[i] > altitudes[1] || range === 0) {
+            if (d[i] < filters[0] || d[i] > filters[1] || range === 0) {
                 d[i + 3] = 0;
                 continue;
             }
-            color = colors[Math.round((d[i] - altitudes[0]) * 255 / range)];
+            color = colors[Math.round((d[i] - filters[0]) * 255 / range)];
             d[i] = color.r;
             d[i + 1] = color.g;
             d[i + 2] = color.b;
             d[i + 3] = 255;
         }
     },
-    _scaleTile: function(tile, colors, altitudes, callback) {
+    _scaleTile: function(tile, colors, filters, callback) {
         var src = (" " + tile.src).slice(1);
         var imageDOM = new Image();
         var self = this;
@@ -1147,14 +1147,14 @@ L.HeatMap = L.TileLayer.extend({
             var imageData = context.getImageData(0, 0, width, height);
             var data = imageData.data;
             var originData = new Uint8ClampedArray(data);
-            self._scale(data, width, height, colors, altitudes);
+            self._scale(data, width, height, colors, filters);
             context.putImageData(imageData, 0, 0);
             return callback(tile, canvasDOM, originData, width, height);
         };
         imageDOM.src = src;
     },
-    _reScaleData: function(data, width, height, colors, altitudes) {
-        this._scale(data, width, height, colors, altitudes);
+    _reScaleData: function(data, width, height, colors, filters) {
+        this._scale(data, width, height, colors, filters);
         var canvasDOM = L.DomUtil.create("canvas");
         canvasDOM.width = width;
         canvasDOM.height = height;
