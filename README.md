@@ -14,4 +14,4 @@ var heatMap = L.heatMap('heatmap/tiles/{z}/{x}/{y}.png').addTo(map);
 You can find an example in `example`. It's good enough to know how to use this plugin.
 
 ## License
-Leaflet.Editable is released under the MIT licence.
+This is released under the MIT licence.
