@@ -1,5 +1,5 @@
 {
-  "name": "leaflet-heatmap",
+  "name": "leaflet-tilelayer-heatmap",
   "version": "0.0.1",
   "description": "Heatmap plugin for Leaflet.js",
   "main": "src/index.js",
