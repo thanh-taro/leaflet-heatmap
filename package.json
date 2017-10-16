@@ -1,0 +1,36 @@
+{
+  "name": "leaflet-tilelayer-heatmap",
+  "version": "0.0.2",
+  "description": "Heatmap plugin for Leaflet.js",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "eslint src/*.js",
+    "lint-fix": "eslint src/*.js --fix",
+    "dev": "live-server --ignore=node_modules --open=example",
+    "build-src": "uglifyjs src/index.js --beautify -o dist/L.HeatMap.js",
+    "build-compress": "uglifyjs src/index.js --compress --mangle -o dist/L.HeatMap.min.js --source-map filename=L.HeightMap.min.js.map",
+    "build": "npm run build-src && npm run build-compress"
+  },
+  "keywords": [
+    "heatmap",
+    "heightmap",
+    "leaflet",
+    "tilelayer",
+    "tiles"
+  ],
+  "author": "Nguyen Tri Thanh <adamnguyen.itdn@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.8.0",
+    "live-server": "^1.2.0",
+    "uglify-js": "^3.1.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thanh-taro/leaflet-heatmap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thanh-taro/leaflet-heatmap/issues"
+  },
+  "homepage": "https://github.com/thanh-taro/leaflet-heatmap#readme"
+}
