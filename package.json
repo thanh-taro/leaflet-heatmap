@@ -1,6 +1,6 @@
 {
   "name": "leaflet-tilelayer-heatmap",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Heatmap plugin for Leaflet.js",
   "main": "src/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "lint-fix": "eslint src/*.js --fix",
     "dev": "live-server --ignore=node_modules --open=example",
     "build-src": "uglifyjs src/index.js --beautify -o dist/L.HeatMap.js",
-    "build-compress": "uglifyjs src/index.js --compress --mangle -o dist/L.HeatMap.min.js --source-map filename=L.HeightMap.min.js.map",
+    "build-compress": "uglifyjs src/index.js --compress --mangle -o dist/L.HeatMap.min.js --source-map filename=L.HeatMap.min.js.map",
     "build": "npm run build-src && npm run build-compress"
   },
   "keywords": [
